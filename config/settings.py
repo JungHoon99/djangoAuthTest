@@ -42,6 +42,9 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'rest_framework_simplejwt.token_blacklist',
 
+    'guardian',
+    'rolepermissions',
+
     'allauth',
     'corsheaders', # CORS 허용
 ]
@@ -117,6 +120,10 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',  # 기본 인증 백엔드
+    'guardian.backends.ObjectPermissionBackend',  # django-guardian 백엔드
+]
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
