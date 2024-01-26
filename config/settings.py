@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
 from pathlib import Path
+from datetime import timedelta
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -44,9 +45,9 @@ INSTALLED_APPS = [
 
     'guardian',
     'rolepermissions',
-
-    'allauth',
-    'corsheaders' # CORS 허용
+    'corsheaders',
+    
+    'accounts.apps.AccountsConfig',
 ]
 
 MIDDLEWARE = [
@@ -124,6 +125,15 @@ AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',  # 기본 인증 백엔드
     'guardian.backends.ObjectPermissionBackend',  # django-guardian 백엔드
 ]
+
+AUTH_USER_MODEL = 'accounts.MyUser'
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(hours=12),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=5),
+    'ROTATE_REFRESH_TOKENS': True,  # access 토큰 재발행 시 refresh token 재발행
+    'BLACKLIST_AFTER_ROTATION': True,   # 기존에 있던 refresh token 은 blacklist 에 등록됨
+}
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
