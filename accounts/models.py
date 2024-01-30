@@ -1,6 +1,6 @@
 import uuid
 
-from django.contrib.auth.models import BaseUserManager, AbstractBaseUser
+from django.contrib.auth.models import BaseUserManager, AbstractBaseUser, Group, Permission
 from django.db import models
 
 
@@ -39,8 +39,8 @@ class MyUserManager(BaseUserManager):
 class MyUser(AbstractBaseUser):
 
     MyUser_ROLL_LABEL=[
+        ('MEMBER', '멤버'),
         ('MASTER', '마스터'),
-        ('MEMBER', '멤버')
     ]
     email = models.EmailField(verbose_name='회사 이메일 혹은 이메일', max_length=50, unique=True, null=False)
     name = models.CharField(verbose_name='회사 이름 혹은 이름', max_length=30)
@@ -52,6 +52,14 @@ class MyUser(AbstractBaseUser):
     last_login = models.DateTimeField(verbose_name='로그인 일시', blank=True, null=True)
     created = models.DateTimeField(verbose_name='등록 일시', auto_now_add=True)
     updated = models.DateTimeField(verbose_name='수정 일시', auto_now=True)
+    groups = models.ManyToManyField(Group, verbose_name='roll_groups', blank=True, related_name='user_set', related_query_name='user')
+    user_permissions = models.ManyToManyField(
+        Permission,
+        verbose_name='user permissions',
+        blank=True,
+        related_name="user_set",
+        related_query_name="user",
+    )
 
     objects = MyUserManager()
 
@@ -71,3 +79,15 @@ class MyUser(AbstractBaseUser):
 
     def has_module_perms(self, app_label):
         return True
+
+from rolepermissions.roles import AbstractUserRole
+
+class Teacher(AbstractUserRole):
+    available_permissions = {
+        'edit_course': True,
+    }
+
+class Student(AbstractUserRole):
+    available_permissions = {
+        'view_course': True,
+    }

@@ -1,6 +1,5 @@
 from django.urls import path
-from .views import AccountCreateAPIView, LoginAPIView, RefreshTokenAPIView
-
+from .views import AccountCreateAPIView, LoginAPIView, RefreshTokenAPIView, TeacherAPIView
 from rest_framework_simplejwt.views import (
     TokenVerifyView,
     TokenBlacklistView,
@@ -14,4 +13,5 @@ urlpatterns = [
     path('logout/', TokenBlacklistView.as_view(), name='tokenBlacklist'),
     path('refresh/', RefreshTokenAPIView.as_view(), name='tokenRefresh'),
     path('verify/', TokenVerifyView.as_view(), name='tokenVerify'),
+    path('test/', TeacherAPIView.as_view(), name='permission')
 ]

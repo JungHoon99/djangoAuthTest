@@ -1,13 +1,10 @@
-from django.http import HttpRequest, HttpResponse
-from django.shortcuts import redirect
 from rest_framework import status, generics
 from rest_framework.response import Response
 from rest_framework_simplejwt.serializers import TokenRefreshSerializer
-
 from accounts.serializers import MyUserSerializer,LoginSerializer
-
-def home(request: HttpRequest) -> HttpResponse:
-    return redirect('/account/login/')
+from accounts.models import Teacher, Student, MyUser
+from rolepermissions.roles import assign_role
+from jwtAuth import jwt_decoder
 
 class AccountCreateAPIView(generics.CreateAPIView):
     # 회원가입, 유저 생성
@@ -63,3 +60,12 @@ class RefreshTokenAPIView(generics.GenericAPIView):
         res.set_cookie("refresh", serializer.validated_data['refresh'], httponly=True)
 
         return res
+
+class TeacherAPIView(generics.GenericAPIView):
+    def get(self, request, *args, **kwargs):
+        data = jwt_decoder(self.request.headers.get('Authorization'))
+        print(data)
+        user = MyUser.objects.get(id=data['user_id'])
+        assign_role(user, 'teacher')
+        return Response({"message": "hi"})
+

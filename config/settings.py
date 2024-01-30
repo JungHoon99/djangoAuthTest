@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'corsheaders',
     
     'accounts.apps.AccountsConfig',
+    'todos.apps.TodosConfig',
 ]
 
 MIDDLEWARE = [
@@ -127,6 +128,11 @@ AUTHENTICATION_BACKENDS = [
 ]
 
 AUTH_USER_MODEL = 'accounts.MyUser'
+
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',  # 기본 인증 백엔드
+    'guardian.backends.ObjectPermissionBackend',
+]
 
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(hours=12),
