@@ -3,7 +3,6 @@ import uuid
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser, Group, Permission
 from django.db import models
 
-
 class MyUserManager(BaseUserManager):
     def create_user(self, email, name, phone, password=None):
 

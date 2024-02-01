@@ -13,5 +13,10 @@ class Todo(models.Model):
 
     class Meta:
         db_table = 'todo'
+        permissions = (
+            ('access_todo', 'Can access todo'),
+        )
+        models.constraints.pk = []
+
     def __str__(self):
         return self.title

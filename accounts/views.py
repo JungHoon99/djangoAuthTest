@@ -1,10 +1,14 @@
 from rest_framework import status, generics
+from rest_framework.authentication import SessionAuthentication
 from rest_framework.response import Response
 from rest_framework_simplejwt.serializers import TokenRefreshSerializer
+from rest_framework_simplejwt.tokens import AccessToken
+from rest_framework.permissions import IsAuthenticated
+from rest_framework_simplejwt.authentication import JWTAuthentication
 from accounts.serializers import MyUserSerializer,LoginSerializer
 from accounts.models import Teacher, Student, MyUser
 from rolepermissions.roles import assign_role
-from jwtAuth import jwt_decoder
+
 
 class AccountCreateAPIView(generics.CreateAPIView):
     # 회원가입, 유저 생성
@@ -62,10 +66,11 @@ class RefreshTokenAPIView(generics.GenericAPIView):
         return res
 
 class TeacherAPIView(generics.GenericAPIView):
-    def get(self, request, *args, **kwargs):
-        data = jwt_decoder(self.request.headers.get('Authorization'))
-        print(data)
-        user = MyUser.objects.get(id=data['user_id'])
-        assign_role(user, 'teacher')
-        return Response({"message": "hi"})
+    permission_classes = [IsAuthenticated, ]
 
+    def get(self, request, *args, **kwargs):
+        print(request.user)
+
+
+        user = MyUser.objects.get(id=request.user.id)
+        return Response({"message": request.user.id})

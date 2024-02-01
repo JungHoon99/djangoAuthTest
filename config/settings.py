@@ -46,6 +46,8 @@ INSTALLED_APPS = [
     'guardian',
     'rolepermissions',
     'corsheaders',
+    'predicates',
+    'rules.apps.AutodiscoverRulesConfig',
     
     'accounts.apps.AccountsConfig',
     'todos.apps.TodosConfig',
@@ -123,16 +125,12 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 AUTHENTICATION_BACKENDS = [
+    'rules.permissions.ObjectPermissionBackend',
     'django.contrib.auth.backends.ModelBackend',  # 기본 인증 백엔드
     'guardian.backends.ObjectPermissionBackend',  # django-guardian 백엔드
 ]
 
 AUTH_USER_MODEL = 'accounts.MyUser'
-
-AUTHENTICATION_BACKENDS = [
-    'django.contrib.auth.backends.ModelBackend',  # 기본 인증 백엔드
-    'guardian.backends.ObjectPermissionBackend',
-]
 
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(hours=12),
